@@ -10,7 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 //Other Includes
-//#include "ScreenObjects.h"
+#include "ScreenObject.h"
 
 //prototypes
 
@@ -21,10 +21,6 @@ int main()
 	sf::RenderWindow mainApp(sf::VideoMode(sf::VideoMode::getDesktopMode().width / 4 * 3,   // sets the width of the window to 3/4 the size of the monitor's width
 		sf::VideoMode::getDesktopMode().height / 4 * 3),									// sets the height of the window to 3/4 the size of the monitor's height
 		"PC Console");	                                                                    // sets the title of the window
-	sf::Sprite sprite;
-	sf::Texture texture;
-	texture.loadFromFile("cb.bmp");
-	sprite.setTexture(texture);
 
 	// While main Window is up
 	while (mainApp.isOpen())
@@ -42,7 +38,7 @@ int main()
 		{
 			sf::Vector2i pos = sf::Mouse::getPosition(mainApp);
 			//sf::Mouse::setPosition(sf::Vector2i(100, 200), mainApp);
-			std::cout << pos.x << ", " << pos.y << std::endl;
+			//std::cout << pos.x << ", " << pos.y << std::endl;
 		}
 
 
@@ -50,7 +46,7 @@ int main()
 		mainApp.clear();
 
 		//draw stuff
-		mainApp.draw(sprite);
+		//mainApp.draw();
 
 		// Update the window
 		mainApp.display();
