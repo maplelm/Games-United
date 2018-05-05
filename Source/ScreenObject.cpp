@@ -111,25 +111,25 @@ sf::Vector2f ScreenObject::getScale()
 }
 //Setters-----------------------------------------------------
 
-void ScreenObjects::setSprite(sf::Sprite sprite)
+void ScreenObject::setSprite(sf::Sprite sprite)
 {
 	this->objectSprite = sprite;
 }
 
-void ScreenObjects::setTexture(std::string textureName)
+void ScreenObject::setTexture(std::string textureName)
 {
 	this->textureFileName = textureName;
 	loadTexture(textureName);
 }
-void ScreenObjects::setSelected(bool onOff)
+void ScreenObject::setSelected(bool onOff)
 {
 	selected = onOff;
 }
-void ScreenObjects::setSmooth(bool onOff)
+void ScreenObject::setSmooth(bool onOff)
 {
 	objectTexture.setSmooth(onOff);
 }
-void ScreenObjects::setRepeated(bool onOff)
+void ScreenObject::setRepeated(bool onOff)
 {
 	objectTexture.setRepeated(onOff);
 }
