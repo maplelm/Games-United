@@ -50,7 +50,7 @@ public:
 	float getRotation();
 	sf::Vector2f getScale();
 
-private:
+protected:
 
 	//SFML Variables
 	sf::Sprite objectSprite;
