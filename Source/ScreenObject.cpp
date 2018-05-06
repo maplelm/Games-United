@@ -4,8 +4,14 @@
 ScreenObject::ScreenObject()
 {
 	selected = false;
+	mouseHover = false;
 }
-
+ScreenObject::ScreenObject(std::string textureName)
+{
+	selected = false;
+	mouseHover = false;
+	setTexture(textureName);
+}
 //Destructor's-----------------------------------------------------
 ScreenObject::~ScreenObject()
 {
@@ -24,6 +30,14 @@ bool ScreenObject::isSmooth()
 bool ScreenObject::isSelect()
 {
 	return selected;
+}
+bool ScreenObject::isMouseHover()
+{
+	return mouseHover;
+}
+bool ScreenObject::isVisable()
+{
+	return visable;
 }
 
 //Toggle Functions-----------------------------------------------------
@@ -53,9 +67,26 @@ void ScreenObject::toggleSmooth()
 	else
 		this->objectTexture.setSmooth(true);
 }
+void ScreenObject::toggleMouseHover()
+{
+	if (mouseHover)
+		mouseHover = false;
+	else
+		mouseHover = true;
+}
+void ScreenObject::toggleVisable()
+{
+	if (visable)
+		visable = false;
+	else
+		visable = true;
+}
+
 //Graphics Functions-----------------------------------------------------
 bool ScreenObject::loadTexture(std::string textureName)
 {
+	textureFileName = textureName;
+
 	if (!objectTexture.loadFromFile(textureName))
 		return false;
 
@@ -64,18 +95,21 @@ bool ScreenObject::loadTexture(std::string textureName)
 }
 
 //Manipulation Functions-----------------------------------------------------
-
-void ScreenObject::moveSprite(float x, float y)
+void ScreenObject::move(float x, float y)
 {
 	objectSprite.move(x, y);
 }
-void ScreenObject::moveSprite(sf::Vector2f vf)
+void ScreenObject::move(sf::Vector2f vf)
 {
 	objectSprite.move(vf);
 }
 void ScreenObject::setPosition(float x, float y)
 {
 	objectSprite.setPosition(x, y);
+}
+void ScreenObject::setPosition(sf::Vector2f pos)
+{
+	objectSprite.setPosition(pos);
 }
 //theta is in degrees
 void ScreenObject::setRotation(float theta)
@@ -90,6 +124,10 @@ void ScreenObject::Rotate(float theta)
 void ScreenObject::setScale(float xScale, float yScale)
 {
 	objectSprite.setScale(xScale, yScale);
+}
+void ScreenObject::setScale(sf::Vector2f scl)
+{
+	objectSprite.setScale(scl);
 }
 
 //Getters-----------------------------------------------------
@@ -109,16 +147,15 @@ sf::Vector2f ScreenObject::getScale()
 {
 	return objectSprite.getScale();
 }
-//Setters-----------------------------------------------------
 
+//Setters-----------------------------------------------------
 void ScreenObject::setSprite(sf::Sprite sprite)
 {
-	this->objectSprite = sprite;
+	objectSprite = sprite;
 }
 
 void ScreenObject::setTexture(std::string textureName)
 {
-	this->textureFileName = textureName;
 	loadTexture(textureName);
 }
 void ScreenObject::setSelected(bool onOff)
@@ -133,6 +170,7 @@ void ScreenObject::setRepeated(bool onOff)
 {
 	objectTexture.setRepeated(onOff);
 }
+
 //Virtual Fucntions-----------------------------------------------------
 bool ScreenObject::onClick()
 {

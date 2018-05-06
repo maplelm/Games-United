@@ -13,6 +13,7 @@ class ScreenObject
 public:
 	//Constructors
 	ScreenObject();
+	ScreenObject(std::string);
 
 	//Destructor's
 	~ScreenObject();
@@ -20,21 +21,27 @@ public:
 	//Toggle Functions
 	void toggleSmooth();
 	void toggleRepeated();
-	void toggleSelect();
+	virtual void toggleSelect();
+	virtual void toggleMouseHover();
+	void toggleVisable();
 
 
 	//Toggle Queries
 	bool isSmooth();
 	bool isRepeated();
 	bool isSelect();
+	bool isMouseHover();
+	bool isVisable();
 
 	//Manipulation Functions
-	void moveSprite(float x, float y);
-	void moveSprite(sf::Vector2f);
-	void setPosition(float x, float y);
-	void setRotation(float);
-	void Rotate(float);
-	void setScale(float, float);
+	virtual void move(float x, float y);
+	virtual void move(sf::Vector2f);
+	virtual void setPosition(float x, float y);
+	virtual void setPosition(sf::Vector2f);
+	virtual void setRotation(float);
+	virtual void Rotate(float);
+	virtual void setScale(float, float);
+	virtual void setScale(sf::Vector2f);
 
 	//Setters
 	void setSprite(sf::Sprite);
@@ -59,6 +66,8 @@ protected:
 
 	//User Interaction variables
 	bool selected;
+	bool mouseHover;
+	bool visable;
 
 	//Graphics Functions
 	bool loadTexture(std::string);
