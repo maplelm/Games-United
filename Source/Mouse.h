@@ -3,7 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 
-static class Mouse
+class Mouse
 {
 public:
 	Mouse();

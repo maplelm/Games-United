@@ -63,9 +63,9 @@ protected:
 	//Graphics Functions
 	bool loadTexture(std::string);
 
-	//User Interaction Fucntions
-	//virtual bool onClick() = 0;   // if object is clicked on this function will be called
-	//virtual bool onRelease() = 0; // if object was clicked on this fucntion will be called apon release
+	//Virtual Fucntions
+	virtual bool onClick();   // if object is clicked on this function will be called
+	virtual bool onRelease(); // if object was clicked on this fucntion will be called apon release
 };
 
 #endif // SCREENOBJECT_H

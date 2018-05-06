@@ -133,12 +133,14 @@ void ScreenObject::setRepeated(bool onOff)
 {
 	objectTexture.setRepeated(onOff);
 }
-//User Interaction Functions-----------------------------------------------------
-/*bool ScreenObjects::onClick()
+//Virtual Fucntions-----------------------------------------------------
+bool ScreenObject::onClick()
 {
-return true;
+	//fucntion is called when window verifies that the mouse has clicked on object
+	return true;
 }
-bool ScreenObjects::onRelease()
+bool ScreenObject::onRelease()
 {
-return true;
-}*/
+	//fucntion is called after the mouse has released its click
+	return true;
+}
