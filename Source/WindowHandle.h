@@ -24,10 +24,11 @@ public:
 
 	//Basic Window Functions
 	void draw(sf::Sprite);
+	void draw(sf::Text);
 	bool pollEvent(sf::Event &e);
 	void close();
 	sf::RenderWindow *getRenderWindow();
-	void clear();
+	void clear(sf::Color);
 	void display();
 	
 	

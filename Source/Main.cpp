@@ -11,6 +11,7 @@
 #include "ScreenObject.h"
 #include "WindowHandle.h"
 #include "Mouse.h"
+#include "ButtonHandle.h"
 
 //prototypes
 static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
@@ -23,7 +24,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
 
 	// Create the main window 3/4 the size of the monitors resolution
@@ -31,7 +32,13 @@ int main()
 		sf::VideoMode::getDesktopMode().height / 4 * 3),									// sets the height of the window to 3/4 the size of the monitor's height
 		"PC Console");	                                                                    // sets the title of the window
 	ScreenObject obj;
-	obj.setTexture("Resources\\cb.bmp");
+	obj.setTexture("Resources\\Images\\cb.bmp");
+
+	ButtonHandle btn("Resources\\Images\\outlineButton.png", "Resources\\Fonts\\arial.ttf");
+	btn.setText("Quit");
+	btn.setPosition(sf::Vector2f(300,300));
+	btn.setFontSize(30.0f);
+	
 
 	// While main Window is up
 	while (mainApp.isOpen())
@@ -54,10 +61,11 @@ int main()
 
 
 		// Clear screen
-		mainApp.clear();
+		mainApp.clear(sf::Color::Blue);
 
 		//draw stuff
 		mainApp.draw(obj.getSprite());
+		btn.draw(&mainApp); 
 
 		// Update the window
 		mainApp.display();

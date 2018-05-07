@@ -3,13 +3,15 @@
 
 #include <string>
 
+#include <iostream>
+
 #include "ScreenObject.h"
 
 class ButtonHandle : public ScreenObject
 {
 public:
 	//Constructors
-	ButtonHandle();
+	ButtonHandle(std::string, std::string);
 
 	//Destructor's
 	~ButtonHandle();
@@ -23,22 +25,32 @@ public:
 	void Rotate(float);
 	void setScale(float, float);
 	void setScale(sf::Vector2f);
+	void setTextureScale(sf::Vector2f);
 
+	//Graphics Functions
+	void draw(WindowHandle*);
+	
 	//Getters
 	std::string getText();
 	sf::Vector2f getTextOffset();
+	int getFontSize();
 
 	//Setters
-	void setTextXOffset(float,float);
-	void setTextYoffset(sf::Vector2f);
-	void setText();
-	void setTextColor();
-	void setTextStyle();
+	void setTextOffset(float,float);
+	void setTextOffset(sf::Vector2f);
+	void setText(std::string);
+	void setTextStyle(sf::Uint32);
+	void setFontSize(float);
 
 private:
 
+	//Graphics Functions
+	bool loadTexture(std::string);
+
 	//Text Based Functions
 	void loadFont(std::string);
+	void updateOffset();
+	void textFix();
 
 	sf::Text buttonText;
 	sf::Font buttonFont;

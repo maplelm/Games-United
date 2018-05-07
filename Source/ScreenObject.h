@@ -8,6 +8,17 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "WindowHandle.h"
+
+//States Struct
+struct states
+{
+	bool selected = false;
+	bool disabled = false;
+	bool visable = true;
+	bool mouseOver = false;
+};
+
 class ScreenObject
 {
 public:
@@ -22,16 +33,23 @@ public:
 	void toggleSmooth();
 	void toggleRepeated();
 	virtual void toggleSelect();
-	virtual void toggleMouseHover();
 	void toggleVisable();
-
+	void toggleDisable();
+	void toggleMouseOver();
 
 	//Toggle Queries
 	bool isSmooth();
 	bool isRepeated();
 	bool isSelect();
-	bool isMouseHover();
+	bool isMouseOver();
 	bool isVisable();
+	bool isDisabled();
+
+	//states struct
+	states state;
+
+	//Graphics Functions
+	virtual void draw(WindowHandle*);
 
 	//Manipulation Functions
 	virtual void move(float x, float y);
@@ -47,6 +65,9 @@ public:
 	void setSprite(sf::Sprite);
 	void setTexture(std::string);
 	void setSelected(bool);
+	void setVisable(bool);
+	void setDisable(bool);
+	void setmouseOver(bool);
 	void setSmooth(bool);
 	void setRepeated(bool);
 
@@ -64,17 +85,10 @@ protected:
 	sf::Texture objectTexture;
 	std::string textureFileName;
 
-	//User Interaction variables
-	bool selected;
-	bool mouseHover;
-	bool visable;
-
 	//Graphics Functions
-	bool loadTexture(std::string);
+	virtual bool loadTexture(std::string);
 
-	//Virtual Fucntions
-	virtual bool onClick();   // if object is clicked on this function will be called
-	virtual bool onRelease(); // if object was clicked on this fucntion will be called apon release
+	
 };
 
 #endif // SCREENOBJECT_H

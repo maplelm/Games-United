@@ -3,13 +3,17 @@
 //Constructors-----------------------------------------------------
 ScreenObject::ScreenObject()
 {
-	selected = false;
-	mouseHover = false;
+	state.selected = false;
+	state.disabled = false;
+	state.mouseOver = false;
+	state.visable = true;
 }
 ScreenObject::ScreenObject(std::string textureName)
 {
-	selected = false;
-	mouseHover = false;
+	state.selected = false;
+	state.disabled = false;
+	state.mouseOver = false;
+	state.visable = true;
 	setTexture(textureName);
 }
 //Destructor's-----------------------------------------------------
@@ -29,24 +33,28 @@ bool ScreenObject::isSmooth()
 }
 bool ScreenObject::isSelect()
 {
-	return selected;
+	return state.selected;
 }
-bool ScreenObject::isMouseHover()
+bool ScreenObject::isMouseOver()
 {
-	return mouseHover;
+	return state.mouseOver;
 }
 bool ScreenObject::isVisable()
 {
-	return visable;
+	return state.visable;
+}
+bool ScreenObject::isDisabled()
+{
+	return state.disabled; 
 }
 
 //Toggle Functions-----------------------------------------------------
 void ScreenObject::toggleSelect()
 {
-	if (selected)
-		selected = false;
+	if (state.selected)
+		state.selected = false;
 	else
-		selected = true;
+		state.selected = true;
 
 	/*Change the texture to glow or something
 	add functionality later*/
@@ -67,21 +75,27 @@ void ScreenObject::toggleSmooth()
 	else
 		this->objectTexture.setSmooth(true);
 }
-void ScreenObject::toggleMouseHover()
-{
-	if (mouseHover)
-		mouseHover = false;
-	else
-		mouseHover = true;
-}
 void ScreenObject::toggleVisable()
 {
-	if (visable)
-		visable = false;
+	if (state.visable)
+		state.visable = false;
 	else
-		visable = true;
+		state.visable = true;
 }
-
+void ScreenObject::toggleDisable()
+{
+	if (state.disabled)
+		state.disabled = false;
+	else
+		state.disabled = true;
+}
+void ScreenObject::toggleMouseOver()
+{
+	if (state.mouseOver)
+		state.mouseOver = false;
+	else
+		state.mouseOver = true;
+}
 //Graphics Functions-----------------------------------------------------
 bool ScreenObject::loadTexture(std::string textureName)
 {
@@ -89,9 +103,14 @@ bool ScreenObject::loadTexture(std::string textureName)
 
 	if (!objectTexture.loadFromFile(textureName))
 		return false;
-
+	
 	objectSprite.setTexture(objectTexture);
+	objectSprite.setTextureRect(sf::IntRect(objectSprite.getPosition().x, objectSprite.getPosition().y, objectTexture.getSize().x, objectTexture.getSize().y));
 	return true;
+}
+void ScreenObject::draw(WindowHandle * handle)
+{
+	handle->draw(objectSprite);
 }
 
 //Manipulation Functions-----------------------------------------------------
@@ -160,7 +179,19 @@ void ScreenObject::setTexture(std::string textureName)
 }
 void ScreenObject::setSelected(bool onOff)
 {
-	selected = onOff;
+	state.selected = onOff;
+}
+void ScreenObject::setVisable(bool onOff)
+{
+	state.visable = onOff;
+}
+void ScreenObject::setDisable(bool onOff)
+{
+	state.disabled = onOff;
+}
+void ScreenObject::setmouseOver(bool onOff)
+{
+	state.mouseOver = onOff;
 }
 void ScreenObject::setSmooth(bool onOff)
 {
@@ -169,16 +200,4 @@ void ScreenObject::setSmooth(bool onOff)
 void ScreenObject::setRepeated(bool onOff)
 {
 	objectTexture.setRepeated(onOff);
-}
-
-//Virtual Fucntions-----------------------------------------------------
-bool ScreenObject::onClick()
-{
-	//fucntion is called when window verifies that the mouse has clicked on object
-	return true;
-}
-bool ScreenObject::onRelease()
-{
-	//fucntion is called after the mouse has released its click
-	return true;
 }
