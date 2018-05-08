@@ -5,14 +5,30 @@
 #define SCREENOBJECT_H
 
 #include <string>
+#include <iostream>
 
 #include <SFML/Graphics.hpp>
+
+#include "WindowHandle.h"
+#include "Mouse.h"
+
+//States Struct
+struct states
+{
+	bool disabled = false;
+	bool visable = true;
+	bool mouseOver = false;
+	bool triggered = false;
+};
 
 class ScreenObject
 {
 public:
 	//Constructors
 	ScreenObject();
+	ScreenObject(int);
+	ScreenObject(int, sf::RenderWindow *);
+	ScreenObject(int,sf::RenderWindow *, std::string);
 
 	//Destructor's
 	~ScreenObject();
@@ -20,28 +36,45 @@ public:
 	//Toggle Functions
 	void toggleSmooth();
 	void toggleRepeated();
-	void toggleSelect();
-
+	virtual void toggleTriggered();
+	void toggleVisable();
+	void toggleDisable();
+	void toggleMouseOver();
 
 	//Toggle Queries
 	bool isSmooth();
 	bool isRepeated();
-	bool isSelect();
+	bool isTriggered();
+	bool isMouseOver();
+	bool isVisable();
+	bool isDisabled();
+
+	//states struct
+	states state;
+
+	//Graphics Functions
+	virtual void draw();
 
 	//Manipulation Functions
-	void moveSprite(float x, float y);
-	void moveSprite(sf::Vector2f);
-	void setPosition(float x, float y);
-	void setRotation(float);
-	void Rotate(float);
-	void setScale(float, float);
+	virtual void move(float x, float y);
+	virtual void move(sf::Vector2f);
+	virtual void setPosition(float x, float y);
+	virtual void setPosition(sf::Vector2f);
+	virtual void setRotation(float);
+	virtual void Rotate(float);
+	virtual void setScale(float, float);
+	virtual void setScale(sf::Vector2f);
 
 	//Setters
 	void setSprite(sf::Sprite);
 	void setTexture(std::string);
 	void setSelected(bool);
+	void setVisable(bool);
+	void setDisable(bool);
+	void setmouseOver(bool);
 	void setSmooth(bool);
 	void setRepeated(bool);
+	void setTargetWindow(sf::RenderWindow *);
 
 
 	//Getters
@@ -49,23 +82,25 @@ public:
 	sf::Texture getTexture();
 	float getRotation();
 	sf::Vector2f getScale();
+	sf::RenderWindow * getTargetWindow();
+
+	//User Interaction
+	virtual void clicked(sf::RenderWindow*);
 
 protected:
 
+	int ID;
 	//SFML Variables
 	sf::Sprite objectSprite;
 	sf::Texture objectTexture;
 	std::string textureFileName;
-
-	//User Interaction variables
-	bool selected;
+	sf::RenderWindow * WindowPnt; //pointer to the window the button should be drawn two
 
 	//Graphics Functions
-	bool loadTexture(std::string);
+	virtual bool loadTexture(std::string);
 
-	//User Interaction Fucntions
-	//virtual bool onClick() = 0;   // if object is clicked on this function will be called
-	//virtual bool onRelease() = 0; // if object was clicked on this fucntion will be called apon release
+
+	
 };
 
 #endif // SCREENOBJECT_H

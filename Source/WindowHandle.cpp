@@ -74,6 +74,14 @@ void WindowHandle::draw(sf::Sprite spr)
 {
 	winHandle.draw(spr);
 }
+void WindowHandle::draw(sf::Text txt)
+{
+	winHandle.draw(txt);
+}
+void WindowHandle::draw(sf::RectangleShape rect)
+{
+	winHandle.draw(rect);
+}
 bool WindowHandle::pollEvent(sf::Event &e)
 {
 	return winHandle.pollEvent(e);
@@ -86,9 +94,9 @@ sf::RenderWindow *WindowHandle::getRenderWindow()
 {
 	return &winHandle;
 }
-void WindowHandle::clear()
+void WindowHandle::clear(sf::Color color = sf::Color(0,0,0,255))
 {
-	winHandle.clear();
+	winHandle.clear(color);
 }
 void WindowHandle::display()
 {
