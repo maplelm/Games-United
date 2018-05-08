@@ -25,6 +25,7 @@ public:
 	//Basic Window Functions
 	void draw(sf::Sprite);
 	void draw(sf::Text);
+	void draw(sf::RectangleShape);
 	bool pollEvent(sf::Event &e);
 	void close();
 	sf::RenderWindow *getRenderWindow();

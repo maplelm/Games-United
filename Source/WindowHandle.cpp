@@ -78,6 +78,10 @@ void WindowHandle::draw(sf::Text txt)
 {
 	winHandle.draw(txt);
 }
+void WindowHandle::draw(sf::RectangleShape rect)
+{
+	winHandle.draw(rect);
+}
 bool WindowHandle::pollEvent(sf::Event &e)
 {
 	return winHandle.pollEvent(e);

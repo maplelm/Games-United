@@ -1,22 +1,35 @@
 #include "ButtonHandle.h"
 
 //Cosntructors---------------------------------
-ButtonHandle::ButtonHandle(std::string texture, std::string font)
+ButtonHandle::ButtonHandle(sf::RenderWindow *windowHandle, std::string font)
 {
+	//setting the target window to draw button on
+	WindowPnt = windowHandle;
 
-	int startx = 0, starty = 0;
-	//loading texture
-	loadTexture(texture);
+	//setting origin of text to middle of button text
+	buttonText.setOrigin(buttonText.getLocalBounds().width / 2, buttonText.getLocalBounds().height / 2);
+	
+	//setting origin of background
+	background.setOrigin(0, 0);
+	
+	//change background color
+	background.setFillColor(sf::Color::Black);
+	background.setOutlineColor(sf::Color::Red);
+	background.setOutlineThickness(2.0f);
+	
+	//Setting default Background size
+	background.setSize(sf::Vector2f(100, 30));
+	
+	//setting text size based on background 
+	updateFontSize();
 
-	//setting up the text to be in the right position
+	//update text-background position offset
 	updateOffset();
-	std::cout << "obj h, w = " << textOffset.x << ", " << textOffset.y << std::endl;
-	std::cout << "obj1 h, w = " << objectSprite.getGlobalBounds().height << ", " << objectSprite.getGlobalBounds().width << std::endl;
-	objectSprite.setPosition(startx, starty);
-	buttonText.setPosition(startx + textOffset.x, starty);
+
+	//setting text font
 	loadFont(font);
-	objectSprite.setColor(sf::Color::Red);
-	objectSprite.setScale(1, 1.3);
+
+	ispressed = false;
 }
 //Destructor'----------------------------------
 ButtonHandle::~ButtonHandle()
@@ -28,45 +41,57 @@ void ButtonHandle::move(float x, float y)
 {
 	objectSprite.move(x, y);
 	buttonText.move(x, y);
+	background.move(x, y);
 }
 void ButtonHandle::move(sf::Vector2f pos)
 {
 	objectSprite.move(pos);
 	buttonText.move(pos);
+	background.move(pos);
 }
 void ButtonHandle::setPosition(float x, float y)
 {
 	objectSprite.setPosition(x, y);
 	buttonText.setPosition(x + textOffset.x , y + textOffset.y);
+	background.setPosition(x, y); 
 }
 void ButtonHandle::setPosition(sf::Vector2f pos)
 {
 	objectSprite.setPosition(pos );
 	buttonText.setPosition(pos + textOffset);
-	buttonText.move(textOffset.x, textOffset.y);
+	background.setPosition(pos);
 }
 //Theta is in degrees
 void ButtonHandle::setRotation(float theta)
 {
 	objectSprite.setRotation(theta);
 	buttonText.setRotation(theta);
+	background.setRotation(theta);
 }
 void ButtonHandle::Rotate(float theta)
 {
 	objectSprite.rotate(theta);
 	buttonText.rotate(theta);
+	background.rotate(theta);
 }
 void ButtonHandle::setScale(float x, float y)
 {
 	objectSprite.setScale(x, y); 
-	buttonText.setScale(x, y); 
+	buttonText.setScale(x, y);
+	background.setScale(x, y);
 	updateOffset();
 }
 void ButtonHandle::setScale(sf::Vector2f scl)
 {
 	objectSprite.setScale(scl);
 	buttonText.setScale(scl);
+	background.setScale(scl);
 	updateOffset();
+	sf::FloatRect rec;
+	rec.width = 10;
+	rec.height = 10;
+	;
+
 }
 void ButtonHandle::setTextureScale(sf::Vector2f scl)
 {
@@ -86,7 +111,7 @@ void ButtonHandle::setTextOffset(sf::Vector2f offset)
 void ButtonHandle::setText(std::string str)
 {
 	buttonText.setString(str);
-	textFix();
+	updateOffset();
 }
 void ButtonHandle::setTextStyle(sf::Uint32 style)
 {
@@ -95,7 +120,7 @@ void ButtonHandle::setTextStyle(sf::Uint32 style)
 void ButtonHandle::setFontSize(float size)
 {
 	buttonText.setCharacterSize(size);
-	objectSprite.setScale(size / 30.0f, size * 0.04333333333);
+	updateTextOrigin();
 	updateOffset();
 }
 
@@ -118,24 +143,17 @@ void ButtonHandle::loadFont(std::string tarFont)
 	buttonFont.loadFromFile(tarFont);
 	buttonText.setFont(buttonFont);
 }
-void ButtonHandle::updateOffset()
-{
-	// setting the (width, hight) of the text offset
-	textOffset = sf::Vector2f(
-	 objectSprite.getGlobalBounds().width / 2.0f - ((buttonText.getCharacterSize() / 2.0f) * (buttonText.getString().getSize() / 2.0f)),
-	 objectSprite.getGlobalBounds().height / 2.0f - (buttonText.getCharacterSize() / 3.0f * 2.0f));
-	buttonText.setPosition(objectSprite.getPosition() + textOffset);
-}
+
 void ButtonHandle::textFix()
 {
-	objectSprite.setScale(1 + (buttonText.getString().getSize() - 1) * 2, objectSprite.getScale().y);
+	objectSprite.setScale(buttonText.getString().getSize() * .16, buttonText.getCharacterSize() * 0.0433333);
 	updateOffset();
 }
 
 //Graphics Functions--------------------------------------
 void ButtonHandle::draw(WindowHandle* handle)
 {
-	handle->draw(objectSprite);
+	handle->draw(background);
 	handle->draw(buttonText);
 }
 bool ButtonHandle::loadTexture(std::string textureName)
@@ -148,4 +166,31 @@ bool ButtonHandle::loadTexture(std::string textureName)
 	objectSprite.setTexture(objectTexture);
 	updateOffset();
 	return true;
+}
+//Update Functions--------------------------------------
+void ButtonHandle::updateTextOrigin()
+{
+	buttonText.setOrigin(buttonText.getLocalBounds().width / 2, buttonText.getLocalBounds().height / 2);
+}
+void ButtonHandle::updateOffset()
+{
+	updateTextOrigin();
+	textOffset = sf::Vector2f(background.getGlobalBounds().width / 2, (background.getGlobalBounds().height / 3));
+	buttonText.setPosition(background.getPosition() + textOffset);
+}
+void ButtonHandle::updateFontSize()
+{
+	buttonText.setCharacterSize(sqrtf(powf(background.getGlobalBounds().width, 2) + powf(background.getLocalBounds().height, 2)) / 6);
+	updateOffset();
+}
+
+void ButtonHandle::clicked()
+{
+	Mouse mobj(WindowPnt);
+	if (mobj.isWithin(background.getGlobalBounds()) && Mouse::isLeftClicked() && state.triggered == false)
+	{
+		state.triggered = true;
+		std::cout << "button " << ID << "\t triggered: " << state.triggered << std::endl;
+	}
+
 }

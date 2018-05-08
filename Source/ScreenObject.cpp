@@ -3,17 +3,22 @@
 //Constructors-----------------------------------------------------
 ScreenObject::ScreenObject()
 {
-	state.selected = false;
-	state.disabled = false;
-	state.mouseOver = false;
-	state.visable = true;
+	ID = -1;
 }
-ScreenObject::ScreenObject(std::string textureName)
+ScreenObject::ScreenObject(int id)
 {
-	state.selected = false;
-	state.disabled = false;
-	state.mouseOver = false;
-	state.visable = true;
+	ID = id;
+}
+ScreenObject::ScreenObject(int id, sf::RenderWindow *windowHandle)
+{
+	ID = id;
+	WindowPnt = windowHandle;
+
+}
+ScreenObject::ScreenObject(int id,sf::RenderWindow *windowHandle, std::string textureName)
+{
+	ID = id;
+	WindowPnt = windowHandle;
 	setTexture(textureName);
 }
 //Destructor's-----------------------------------------------------
@@ -31,9 +36,9 @@ bool ScreenObject::isSmooth()
 {
 	return objectTexture.isSmooth();
 }
-bool ScreenObject::isSelect()
+bool ScreenObject::isTriggered()
 {
-	return state.selected;
+	return state.triggered;
 }
 bool ScreenObject::isMouseOver()
 {
@@ -49,12 +54,12 @@ bool ScreenObject::isDisabled()
 }
 
 //Toggle Functions-----------------------------------------------------
-void ScreenObject::toggleSelect()
+void ScreenObject::toggleTriggered()
 {
-	if (state.selected)
-		state.selected = false;
+	if (state.triggered)
+		state.triggered = false;
 	else
-		state.selected = true;
+		state.triggered = true;
 
 	/*Change the texture to glow or something
 	add functionality later*/
@@ -108,9 +113,9 @@ bool ScreenObject::loadTexture(std::string textureName)
 	objectSprite.setTextureRect(sf::IntRect(objectSprite.getPosition().x, objectSprite.getPosition().y, objectTexture.getSize().x, objectTexture.getSize().y));
 	return true;
 }
-void ScreenObject::draw(WindowHandle * handle)
+void ScreenObject::draw()
 {
-	handle->draw(objectSprite);
+	WindowPnt->draw(objectSprite);
 }
 
 //Manipulation Functions-----------------------------------------------------
@@ -166,6 +171,10 @@ sf::Vector2f ScreenObject::getScale()
 {
 	return objectSprite.getScale();
 }
+sf::RenderWindow * ScreenObject::getTargetWindow()
+{
+	return WindowPnt;
+}
 
 //Setters-----------------------------------------------------
 void ScreenObject::setSprite(sf::Sprite sprite)
@@ -179,7 +188,7 @@ void ScreenObject::setTexture(std::string textureName)
 }
 void ScreenObject::setSelected(bool onOff)
 {
-	state.selected = onOff;
+	state.triggered = onOff;
 }
 void ScreenObject::setVisable(bool onOff)
 {
@@ -200,4 +209,21 @@ void ScreenObject::setSmooth(bool onOff)
 void ScreenObject::setRepeated(bool onOff)
 {
 	objectTexture.setRepeated(onOff);
+}
+void ScreenObject::setTargetWindow(sf::RenderWindow* tarWindow)
+{
+	WindowPnt = tarWindow;
+}
+//User Interaction Functions
+void ScreenObject::clicked(sf::RenderWindow* window)
+{
+	Mouse mobj(window);
+	if (mobj.isWithin(objectSprite.getGlobalBounds()) && state.triggered == false)
+	{
+		state.triggered = true;
+		std::cout << "button " << ID << "\t triggered: " << state.triggered << std::endl;
+	}
+	else if (state.triggered = true && !Mouse::isLeftClicked)
+		state.triggered = false;
+	std::cout << "button " << ID << "\t triggered: " << state.triggered << std::endl;
 }

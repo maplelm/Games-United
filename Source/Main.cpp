@@ -31,13 +31,10 @@ int main(int argc, char* argv[])
 	WindowHandle mainApp(sf::VideoMode(sf::VideoMode::getDesktopMode().width / 4 * 3,   // sets the width of the window to 3/4 the size of the monitor's width
 		sf::VideoMode::getDesktopMode().height / 4 * 3),									// sets the height of the window to 3/4 the size of the monitor's height
 		"PC Console");	                                                                    // sets the title of the window
-	ScreenObject obj;
-	obj.setTexture("Resources\\Images\\cb.bmp");
 
-	ButtonHandle btn("Resources\\Images\\outlineButton.png", "Resources\\Fonts\\arial.ttf");
+	ButtonHandle btn(mainApp.getRenderWindow(), "Resources\\Fonts\\arial.ttf");
 	btn.setText("Quit");
 	btn.setPosition(sf::Vector2f(300,300));
-	btn.setFontSize(30.0f);
 	
 
 	// While main Window is up
@@ -59,12 +56,11 @@ int main(int argc, char* argv[])
 			//std::cout << pos.x << ", " << pos.y << std::endl;
 		}
 
-
+		btn.clicked();
 		// Clear screen
 		mainApp.clear(sf::Color::Blue);
 
 		//draw stuff
-		mainApp.draw(obj.getSprite());
 		btn.draw(&mainApp); 
 
 		// Update the window

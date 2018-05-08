@@ -2,6 +2,7 @@
 #define BUTTONHANDLE_H
 
 #include <string>
+#include <math.h>
 
 #include <iostream>
 
@@ -11,7 +12,7 @@ class ButtonHandle : public ScreenObject
 {
 public:
 	//Constructors
-	ButtonHandle(std::string, std::string);
+	ButtonHandle(sf::RenderWindow*, std::string);
 
 	//Destructor's
 	~ButtonHandle();
@@ -42,18 +43,31 @@ public:
 	void setTextStyle(sf::Uint32);
 	void setFontSize(float);
 
+	bool ispressed;
+
+	//User Interactoin Functions
+	void clicked();
+
 private:
 
 	//Graphics Functions
 	bool loadTexture(std::string);
 
+	//update Functions
+	void updateFontSize();
+	void updateOffset();
+	void updateTextOrigin();
+
 	//Text Based Functions
 	void loadFont(std::string);
-	void updateOffset();
+	
 	void textFix();
+	
 
 	sf::Text buttonText;
 	sf::Font buttonFont;
+
+	sf::RectangleShape background;
 
 	sf::Vector2f textOffset;
 };

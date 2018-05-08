@@ -1,9 +1,10 @@
 #include "Mouse.h"
 
-//Constructors---------------------------------------
-Mouse::Mouse()
+//Constructors------------------------------------------
+Mouse::Mouse(sf::RenderWindow* window)
 {
-	//constructor stuff
+	loc = sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(1, 1));
+	targetRenderWindow = window;
 }
 //Position Functions-----------------------------------
 sf::Vector2i Mouse::getGlobalPos()
@@ -29,4 +30,18 @@ bool Mouse::isLeftClicked()
 bool Mouse::isRightClicked()
 {
 	return sf::Mouse::isButtonPressed(sf::Mouse::Right);
+}
+void Mouse::updateLocatoin()
+{
+	loc.left = Mouse::getLocalPos(targetRenderWindow).x;
+	loc.top = Mouse::getLocalPos(targetRenderWindow).y;
+}
+bool Mouse::isWithin(sf::FloatRect rect)
+{
+	updateLocatoin();
+	return rect.intersects(loc);
+}
+void Mouse::updateTargetWindow(sf::RenderWindow* window)
+{
+	targetRenderWindow = window;
 }

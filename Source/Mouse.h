@@ -6,7 +6,11 @@
 class Mouse
 {
 public:
-	Mouse();
+
+	Mouse(sf::RenderWindow*);
+
+	sf::RenderWindow * targetRenderWindow;
+	void updateTargetWindow(sf::RenderWindow*);
 
 	//Position Functions
 	static sf::Vector2i getGlobalPos();
@@ -15,6 +19,11 @@ public:
 	static void setGlobalPos(sf::Vector2i);
 	static bool isLeftClicked();
 	static bool isRightClicked();
+	bool isWithin(sf::FloatRect); 
+
+private:
+	void updateLocatoin();
+	sf::FloatRect loc;
 };
 
 #endif //MOUSE_H
